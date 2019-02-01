@@ -53,20 +53,43 @@ class Starter extends React.Component {
         return arr;    
     }
 
+    // Handles not matching case 
+    handleNotMatching(i) {
+        let cc = this.state.tiles.slice();
+
+        cc[i].visible = false;
+        cc[this.state.openID].visible = false;
+
+        window.setTimeout(() => {
+            this.setState({
+                tiles: cc,
+                clickAllow: true,
+                matching: false,
+                openID: -1
+            });
+        }, 1000);
+    }
+
+
     // Handle the clicks
     handleClick(i) {
         // Clicks is allowed and the chosed tile is not visible
         if (this.state.clickAllow && !this.state.tiles[i].visible && !this.state.tiles[i].done) {
 
+            // to render the open tile
+            let copy = this.state.tiles.slice();
+            copy[i].visible = true;
+ 
+            this.setState({
+                tiles: copy,
+                numClicks: this.state.numClicks + 1,
+            });
+
             // This is the guessing process
             if (this.state.matching) {
-                
-                let copy = this.state.tiles.slice();
-                copy[i].visible = true;
 
-                // Render the second one
+                // not allow click after the second tile is selected
                 this.setState({
-                    tiles: copy,
                     clickAllow: false
                 });
                                 
@@ -83,39 +106,24 @@ class Starter extends React.Component {
                             tiles: cpp,
                             tilesLeft: this.state.tilesLeft - 2,
                             clickAllow: true,
-                            numClicks: this.state.numClicks + 1,
                             matching: false,
                             openID: -1
                         });
                     }, 1000);
                 }
+
                 // Failed matching
                 else {
-                    
-                    let cc = this.state.tiles.slice();
 
-                    cc[i].visible = false;
-                    cc[this.state.openID].visible = false;
-    
-                    window.setTimeout(() => {
-                        this.setState({
-                            tiles: cc,
-                            clickAllow: true,
-                            numClicks: this.state.numClicks + 1,
-                            matching: false,
-                            openID: -1
-                        });
-                    }, 1000);
+                    this.setState({
+                        tiles: copy,
+                        numClicks: this.state.numClicks + 1,
+                    }, () => this.handleNotMatching(i));
                 }
             }
             else {
-                let cp = this.state.tiles.slice();
-                cp[i].visible = true;
-
-                // Reveals the chosen tile
+                // first tile was selected
                 this.setState({
-                    tiles: cp,
-                    numClicks: this.state.numClicks + 1,
                     matching: true,
                     openID: i
                 });
