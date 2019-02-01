@@ -57,30 +57,30 @@ class Starter extends React.Component {
     handleClick(i) {
         // Clicks is allowed and the chosed tile is not visible
         if (this.state.clickAllow && !this.state.tiles[i].visible && !this.state.tiles[i].done) {
-            
-            let copy = this.state.tiles.slice();
-            copy[i].visible = true;
 
             // This is the guessing process
             if (this.state.matching) {
                 
+                let copy = this.state.tiles.slice();
+                copy[i].visible = true;
+
                 // Render the second one
                 this.setState({
-                    tiles: copy
+                    tiles: copy,
+                    clickAllow: false
                 });
-                    
-
+                                
                 // Successful matching
-                if (this.state.tiles[i] === this.state.tiles[this.state.openID]) {
-                    //this.state.tiles[i].done = true;
-                    //this.state.tiles[openID].done = true;
-                    copy[i].done = true;
-                    copy[this.state.openID].done = true;
+                if (this.state.tiles[i].value === this.state.tiles[this.state.openID].value) {
+                    
+                    let cpp = this.state.tiles.slice();
 
+                    cpp[i].done = true;
+                    cpp[this.state.openID].done = true;
 
-                    setTimeout(() => {
+                    window.setTimeout(() => {
                         this.setState({
-                            tiles: copy,
+                            tiles: cpp,
                             tilesLeft: this.state.tilesLeft - 2,
                             clickAllow: true,
                             numClicks: this.state.numClicks + 1,
@@ -91,27 +91,15 @@ class Starter extends React.Component {
                 }
                 // Failed matching
                 else {
-                    copy[i].visible = false;
-                    copy[this.state.openID].visible = false;
-
-                    //setTimeout(() => {
-                    //    this.setState({
-                    //        tiles: copy
-                    //    }, () => {
-                    //        this.setState({
-                    //            clickAllow: true,
-                    //            numClicks: this.state.NumClicks + 1,
-                    //            matching: false,
-                    //            openID: -1
-                    //        })
-                    //    })
-                    //}, 1000);
                     
+                    let cc = this.state.tiles.slice();
 
+                    cc[i].visible = false;
+                    cc[this.state.openID].visible = false;
+    
                     window.setTimeout(() => {
                         this.setState({
-                            tiles: copy,
-                            tilesLeft: this.state.tilesLeft,
+                            tiles: cc,
                             clickAllow: true,
                             numClicks: this.state.numClicks + 1,
                             matching: false,
@@ -121,15 +109,12 @@ class Starter extends React.Component {
                 }
             }
             else {
-
+                let cp = this.state.tiles.slice();
+                cp[i].visible = true;
 
                 // Reveals the chosen tile
-                //let copy = this.state.tiles.slice();
-                //copy[i].visible = true;
                 this.setState({
-                    tiles: copy,
-                    tilesLeft: this.state.tilesLeft,
-                    clickAllow: this.state.clickAllow,
+                    tiles: cp,
                     numClicks: this.state.numClicks + 1,
                     matching: true,
                     openID: i
@@ -163,14 +148,21 @@ class Starter extends React.Component {
     
     // Renders the web
     render() {
-        let status = this.state.numClicks;
+
+        let status;
+
+        if (this.state.tilesLeft > 0) {
+            status = this.state.numClicks;
+        }
+        else {
+            status = "Good job!";
+        }
 
         return (
             <div>
                 <div className="status"> {status} </div>
 
-                <button className="resetBtn" onClick={() => this.reset()}>
-                </button>
+                <button className="resetBtn" onClick={() => this.reset()}>Reset</button>
                 <div className="row">
                     {this.renderTile(0)}
                     {this.renderTile(1)}
