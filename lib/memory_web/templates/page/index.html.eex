@@ -1,3 +1,7 @@
-<div id="root">
-  React app loading...
+<div class="row">
+  <div class="column">
+    <h1 id="index-page">Join a Game</h1>
+    <input type="text" id="gName">
+    <p><a href="/game/" + document.getElementById("gName").value>Join GAME</a></p>
+  </div>
 </div>

@@ -2,10 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 
-export default function game_init(root) {
-  ReactDOM.render(<Starter />, root);
+//export default function game_init(root) {
+//  ReactDOM.render(<Starter />, root);
+//}
+
+export default function game_init(root, channel) {
+    ReactDOM.render(<Starter channel={channel} />, root);
 }
 
+// Client-Side for Memory is :
+// {
+// tiles: tiles in the game
+// tilesleft: tiles left to solve
+// clickAllow: flag if clicking is allowed
+// numClicks: numberOfClicks
+// matching: true if the second tile is being open
+// openID: stores the id of the first open tile
 
 class Starter extends React.Component {
     constructor(props) {
@@ -18,7 +30,19 @@ class Starter extends React.Component {
             matching: false,
             openID: -1
         }
+
+	this.channel
+	    .join()
+	    .receive("ok", this.got_view.bind(this))
+	    .receive("error", resp => { console.log("Unable to join", resp); });
     }
+
+
+    got_view(view) {
+	console.log("new view", view);
+	this.setState(view.game);
+    }
+
     
     // Assigns the values to the tiles 
     // Return the array of tiles, where each tile has letter, visiability, and done
