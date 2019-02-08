@@ -17,14 +17,6 @@ defmodule MemoryWeb.GamesChannel do
     end
   end
 
-  #def handle_in("guess", %{"letter" => ll}, socket) do
-  #  name = socket.assigns[:name]
-  #  game = Game.guess(socket.assigns[:game], ll)
-  #  socket = assign(socket, :game, game)
-  #  BackupAgent.put(name, game)
-  #  {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
-  #end
-
   # For reset
   def handle_in("reset", payload, socket) do
     name = socket.assigns[:name]
@@ -34,13 +26,21 @@ defmodule MemoryWeb.GamesChannel do
     {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
   end
   
-  # When the tile is clicked
+  # When the tile is clicked, reveal it
   def handle_in("reveal", %{"id" => id}, socket) do
     name = socket.assigns[:name]
     game = Game.reveal(socket.assigns[:game], id)
     socket = assign(socket, :game, game)
     BackupAgent.put(name, game)
     {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}  
+  end
+
+  def handle_in("guess", %{"id" => id}, socket) do
+    name = socket.assigns[:name]
+    game = Game.guess(socket.assigns[:game], id)
+    socket = assign(socket, :game, game)
+    BackupAgent.put(name, game)
+    {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
   end
 
 

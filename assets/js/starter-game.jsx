@@ -25,9 +25,7 @@ class Starter extends React.Component {
         this.state = {
             tiles: this.assignDummy(),
             tilesLeft: 16,
-            clickAllow: true,
             numClicks: 0,
-            matching: false,
             openID: -1
         }
     this.channel = props.channel;  
@@ -42,9 +40,10 @@ class Starter extends React.Component {
         let outArr = [];
         for (var i = 0; i < 16; i++) {
             outArr.push({
+              id: i,
               value: "GUESS",
-                visible: false,
-                done: false
+              visible: false,
+              done: false
             }); 
         }
         return outArr;
@@ -56,93 +55,18 @@ class Starter extends React.Component {
 	    this.setState(view.game);
     }
 
-    // Handles not matching case 
-    handleNotMatching(i) {
-        let cc = this.state.tiles.slice();
-
-        cc[i].visible = false;
-        cc[this.state.openID].visible = false;
-
-        window.setTimeout(() => {
-            this.setState({
-                tiles: cc,
-                clickAllow: true,
-                matching: false,
-                openID: -1
-            });
-        }, 1000);
-    }
-
-
     // Handle the clicks
     handleClick(i) {
       // TILE is clicked --> we tell channel
-      this.channel.push("guess", { id: id })
-                  .receive("ok", this.got_view(this))
+      // if the tile is not visible
+      if (!this.state.tiles[i].visible) {
+        // Reveal the card
+        this.channel.push("reveal", { id: id })
+                    .receive("ok", this.got_view(this))
 
-      return
-
-
-
-
-
-
-        // Clicks is allowed and the chosed tile is not visible
-        if (this.state.clickAllow && !this.state.tiles[i].visible && !this.state.tiles[i].done) {
-
-            // to render the open tile
-            let copy = this.state.tiles.slice();
-            copy[i].visible = true;
- 
-            this.setState({
-                tiles: copy,
-                numClicks: this.state.numClicks + 1,
-            });
-
-            // This is the guessing process
-            if (this.state.matching) {
-
-                // not allow click after the second tile is selected
-                this.setState({
-                    clickAllow: false
-                });
-                                
-                // Successful matching
-                if (this.state.tiles[i].value === this.state.tiles[this.state.openID].value) {
-                    
-                    let cpp = this.state.tiles.slice();
-
-                    cpp[i].done = true;
-                    cpp[this.state.openID].done = true;
-
-                    window.setTimeout(() => {
-                        this.setState({
-                            tiles: cpp,
-                            tilesLeft: this.state.tilesLeft - 2,
-                            clickAllow: true,
-                            matching: false,
-                            openID: -1
-                        });
-                    }, 1000);
-                }
-
-                // Failed matching
-                else {
-
-                    this.setState({
-                        tiles: copy,
-                        numClicks: this.state.numClicks + 1,
-                    }, () => this.handleNotMatching(i));
-                }
-            }
-            else {
-                // first tile was selected
-                this.setState({
-                    matching: true,
-                    openID: i
-                });
-            }    
-        }
+        this.channel.push("guess", { id: id })
+                    .receive("ok", this.got_view(this))
+      }
     }
 
     // Handles the reset

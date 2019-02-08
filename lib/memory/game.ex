@@ -41,7 +41,8 @@ defmodule Memory.Game do
     newTiles = List.replace_at(game.tiles, id, tile)
     game = Map.put(game, :tiles, newTiles)
   end
-
+  
+  // Handle the click
   def guess(game, id) do
     if (game.openID == -1) do
       # First tile is selected
@@ -50,6 +51,7 @@ defmodule Memory.Game do
     else
       # Second tile is selected
       # TODO + screen freezing
+      Process.sleep(1000)
       game = handleMatching(game, id, game.openID)
         |> Map.put(:numClicks, game.numClicks + 1)
     end
