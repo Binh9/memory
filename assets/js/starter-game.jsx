@@ -23,58 +23,37 @@ class Starter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tiles: this.assignTiles(),
+            tiles: this.assignDummy(),
             tilesLeft: 16,
             clickAllow: true,
             numClicks: 0,
             matching: false,
             openID: -1
         }
-
-	this.channel
+    this.channel = props.channel;  
+ 	  this.channel
 	    .join()
 	    .receive("ok", this.got_view.bind(this))
 	    .receive("error", resp => { console.log("Unable to join", resp); });
     }
 
-
-    got_view(view) {
-	console.log("new view", view);
-	this.setState(view.game);
-    }
-
-    
-    // Assigns the values to the tiles 
-    // Return the array of tiles, where each tile has letter, visiability, and done
-    assignTiles() {
-        let values = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-        let randValues = this.shuffle(values);
-
+    // Assigns dummy values to the 
+    assignDummy() {
         let outArr = [];
         for (var i = 0; i < 16; i++) {
             outArr.push({
-                value: randValues[i],
+              value: "GUESS",
                 visible: false,
                 done: false
             }); 
         }
         return outArr;
+    }
 
-    } 
 
-    // Shuffles the array
-    shuffle(arr) {
-        let i;
-        let j;
-        let temp;
-        for (i = arr.length - 1; i > 0; i--) {
-            j = Math.floor(Math.random() * (i + 1));
-            temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
-    
-        }
-        return arr;    
+    got_view(view) {
+	    console.log("new view", view);
+	    this.setState(view.game);
     }
 
     // Handles not matching case 
@@ -97,6 +76,17 @@ class Starter extends React.Component {
 
     // Handle the clicks
     handleClick(i) {
+      // TILE is clicked --> we tell channel
+      this.channel.push("guess", { id: id })
+                  .receive("ok", this.got_view(this))
+
+      return
+
+
+
+
+
+
         // Clicks is allowed and the chosed tile is not visible
         if (this.state.clickAllow && !this.state.tiles[i].visible && !this.state.tiles[i].done) {
 
@@ -157,20 +147,15 @@ class Starter extends React.Component {
 
     // Handles the reset
     reset() {
-        this.setState({
-            tiles: this.assignTiles(),
-            tilesLeft: 16,
-            clickAllow: true,
-            numClicks: 0,
-            matching: false,
-            openID: -1
-        });
+        this.channel.push("reset", {})
+                    .receive("ok", this.got_view.bind(this))
     }
 
     // Renders a Tile
     renderTile(i) {
         return (
             <Tile
+                id = {i}
                 value = {this.state.tiles[i].value}
                 onClick = {this.handleClick.bind(this, i)}
                 visible = {this.state.tiles[i].visible}
