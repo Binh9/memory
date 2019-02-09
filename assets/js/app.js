@@ -20,7 +20,7 @@ import socket from "./socket";
 import game_init from "./starter-game";
 
 $(() => {
-  let root = $('#root')[0];
+  let root = document.getElementById('root');
   let chanel = socket.chanel("games:" + window.gameName, {});
   game_init(root, channel);
   //game_init(root);

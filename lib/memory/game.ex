@@ -42,7 +42,7 @@ defmodule Memory.Game do
     game = Map.put(game, :tiles, newTiles)
   end
   
-  // Handle the click
+  # Handle the click
   def guess(game, id) do
     if (game.openID == -1) do
       # First tile is selected
