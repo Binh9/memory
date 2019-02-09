@@ -2,6 +2,16 @@
   <div class="column">
     <h1 id="index-page">Join a Game</h1>
     <input type="text" id="gName">
-    <p><a href="/game/" + document.getElementById("gName").value>Join GAME</a></p>
+    <button id="jg" onClick="go()">Join Game</button>
   </div>
 </div>
+
+
+<script>
+	function go() {
+		var link = "https://www.w3schools.com/jsref/event_onclick.asp";
+		//var link = "http://memory2.concola9.com/game/" + document.getElementById("gName").value;
+		window.location.replace(link);
+	}
+</script>
+
