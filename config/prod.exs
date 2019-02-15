@@ -80,7 +80,7 @@ config :logger, level: :info
 # file or create a script for recreating it, since it's
 # kept out of version control and might be hard to recover
 # or recreate for your teammates (or yourself later on).
-# get_secret = fn name ->
+ get_secret = fn name ->
   # Secret generation hack by Nat Tuck for CS4550
   # This function is dedicated to the public domain.
   base = Path.expand("~/.config/phx-secrets")

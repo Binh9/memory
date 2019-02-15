@@ -61,11 +61,11 @@ class Starter extends React.Component {
       // if the tile is not visible
       if (!this.state.tiles[i].visible) {
         // Reveal the card
-        this.channel.push("reveal", { id: id })
-                    .receive("ok", this.got_view(this))
+        this.channel.push("reveal", { id: i })
+                    .receive("ok", this.got_view.bind(this))
 
-        this.channel.push("guess", { id: id })
-                    .receive("ok", this.got_view(this))
+        this.channel.push("guess", { id: i })
+                    .receive("ok", this.got_view.bind(this))
       }
     }
 
