@@ -96,5 +96,5 @@ config :logger, level: :info
   String.trim(File.read!(path))
 end
 
-#config :foo, MemoryWeb.Endpoint,
-#  secret_key_base: get_secret.("key_base")
+config :foo, MemoryWeb.Endpoint,
+  secret_key_base: get_secret.("key_base")
