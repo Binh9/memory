@@ -10,7 +10,7 @@
 <script>
 	function go() {
 		//var link = "https://www.w3schools.com/jsref/event_onclick.asp";
-		var link = "http://locahost:4000/game/" + document.getElementById("gameName").value;
+		var link = "http://memory2.concola9.com/game/" + document.getElementById("gameName").value;
 		window.location.replace(link);
 	}
 </script>
