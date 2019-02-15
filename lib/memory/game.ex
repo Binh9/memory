@@ -51,9 +51,9 @@ defmodule Memory.Game do
     else
       # Second tile is selected
       # TODO + screen freezing
-      Process.sleep(1000)
-      game = handleMatching(game, id, game.openID)
-        |> Map.put(:numClicks, game.numClicks + 1)
+      game
+	|> Map.put(:numClicks, game.numClicks + 1)
+	|> handleMatching(id, game.openID)
     end
   end
 
@@ -71,14 +71,17 @@ defmodule Memory.Game do
 
       game = Map.put(game, :tiles, newTiles)
         |> Map.put(:tilesLeft, game.tilesLeft - 2)
+	|> Map.put(:openID, -1)
     else
       # Bad match
+      Process.sleep(1000)
       tile1 = Map.put(tile1, :visible, false)
       tile2 = Map.put(tile2, :visible, false)
       newTiles = List.replace_at(game.tiles, id1, tile1)
         |> List.replace_at(id2, tile2)
 
       game = Map.put(game, :tiles, newTiles)
+	|> Map.put(:openID, -1)
     end
   end
 

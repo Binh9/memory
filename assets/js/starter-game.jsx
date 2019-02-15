@@ -96,7 +96,7 @@ class Starter extends React.Component {
             status = this.state.numClicks;
         }
         else {
-            status = "Good job!";
+            status = "Good job! Your Score is " + this.state.numClicks;
         }
 
         return (
