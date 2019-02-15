@@ -9,7 +9,7 @@ defmodule Memory.Game do
       openID: -1
      }
 
-     values = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+     values = ["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"]
      randValues = Enum.shuffle(values)
       |> Enum.with_index()
 

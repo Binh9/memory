@@ -15,7 +15,10 @@ config :memory, MemoryWeb.Endpoint,
   version: Application.spec(:phoenix_distillery, :vsn),
   http: [:inet6, port: {:system, "PORT"}],
   url: [host: "memory2.concola9.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  server: true,
+  root: ".",
+  version: Application.spec(:phoenix_distillery, :vsn)
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -93,5 +96,5 @@ config :logger, level: :info
   String.trim(File.read!(path))
 end
 
-config :foo, MemoryWeb.Endpoint,
-  secret_key_base: get_secret.("key_base")
+#config :foo, MemoryWeb.Endpoint,
+#  secret_key_base: get_secret.("key_base")
