@@ -20,7 +20,13 @@ defmodule Memory.Game do
 
   def client_view(game) do
     %{
-      tiles: game.tiles,
+      tiles: Enum.map(game.tiles, fn t ->
+        if t.visible do
+          t.value
+        else
+          "?"
+        end
+      end),
       tilesLeft: game.tilesLeft,
       numClicks: game.numClicks,
       openID: game.openID

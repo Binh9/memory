@@ -21,6 +21,7 @@ export default function game_init(root, channel) {
 
 class Starter extends React.Component {
     constructor(props) {
+	console.log('THIS VERSION IS RUNNING')
         super(props);
         this.state = {
             tiles: this.assignDummy(),
@@ -39,12 +40,7 @@ class Starter extends React.Component {
     assignDummy() {
         let outArr = [];
         for (var i = 0; i < 16; i++) {
-            outArr.push({
-              id: i,
-              value: "GUESS",
-              visible: false,
-              done: false
-            }); 
+	    outArr.push("?"); 
         }
         return outArr;
     }
@@ -77,12 +73,12 @@ class Starter extends React.Component {
 
     // Renders a Tile
     renderTile(i) {
+	console.log(this.state.tiles[i])
         return (
             <Tile
-                id = {i}
-                value = {this.state.tiles[i].value}
-                onClick = {this.handleClick.bind(this, i)}
-                visible = {this.state.tiles[i].visible}
+                id={i}
+                value={this.state.tiles[i]}
+                onClick={this.handleClick.bind(this, i)}
             />
         );
     }
@@ -136,14 +132,9 @@ class Starter extends React.Component {
 
 // Represents a tile on the board
 function Tile(props) {
-    let display = '';
-
-    if (props.visible) {
-        display = props.value;
-    }
     return (
         <button className="tile" onClick={props.onClick}>
-            {display}
+            {props.value}
         </button>
     );
 }
